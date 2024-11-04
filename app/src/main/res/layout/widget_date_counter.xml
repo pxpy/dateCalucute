@@ -25,4 +25,14 @@
         android:textStyle="bold"
         tools:text="已过去 10 天" />
 
+    <TextView
+        android:id="@+id/widget_weeks_days"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/widget_days"
+        android:layout_centerHorizontal="true"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        tools:text="1周3天" />
+
 </RelativeLayout> 

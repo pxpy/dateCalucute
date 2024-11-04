@@ -28,8 +28,12 @@ class MainActivity : AppCompatActivity() {
                 datePicker.dayOfMonth
             )
             val today = LocalDate.now()
-            val days = ChronoUnit.DAYS.between(selectedDate, today)
-            resultText.text = getString(R.string.days_passed, days)
+            val totalDays = ChronoUnit.DAYS.between(selectedDate, today)
+            val weeks = totalDays / 7
+            val remainingDays = totalDays % 7
+            
+            resultText.text = getString(R.string.days_passed, totalDays) + "\n" +
+                             getString(R.string.weeks_days_passed, weeks, remainingDays)
             
             // 保存选择的日期到 SharedPreferences
             getSharedPreferences("date_prefs", MODE_PRIVATE).edit().apply {

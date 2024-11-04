@@ -27,11 +27,14 @@ class DateCounterWidget : AppWidgetProvider() {
         val savedDateEpochDay = prefs.getLong("saved_date", LocalDate.now().toEpochDay())
         val savedDate = LocalDate.ofEpochDay(savedDateEpochDay)
         val today = LocalDate.now()
-        val days = ChronoUnit.DAYS.between(savedDate, today)
+        val totalDays = ChronoUnit.DAYS.between(savedDate, today)
+        val weeks = totalDays / 7
+        val remainingDays = totalDays % 7
 
         val views = RemoteViews(context.packageName, R.layout.widget_date_counter)
         views.setTextViewText(R.id.widget_date, context.getString(R.string.date_format, savedDate.toString()))
-        views.setTextViewText(R.id.widget_days, context.getString(R.string.days_passed, days))
+        views.setTextViewText(R.id.widget_days, context.getString(R.string.days_passed, totalDays))
+        views.setTextViewText(R.id.widget_weeks_days, context.getString(R.string.weeks_days_passed, weeks, remainingDays))
 
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }

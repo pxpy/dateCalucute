@@ -4,4 +4,5 @@
     <string name="calculate">计算天数</string>
     <string name="date_format">选择日期: %s</string>
     <string name="days_passed">已过去 %d 天</string>
+    <string name="weeks_days_passed">%d周%d天</string>
 </resources> 
