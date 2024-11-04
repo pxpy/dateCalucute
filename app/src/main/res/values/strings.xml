@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">日期计数器</string>
+    <string name="calculate">计算天数</string>
+    <string name="date_format">选择日期: %s</string>
+    <string name="days_passed">已过去 %d 天</string>
+</resources> 
