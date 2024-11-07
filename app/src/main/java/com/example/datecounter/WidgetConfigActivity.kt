@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.DatePicker
+import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
 import java.time.LocalDate
 
@@ -13,15 +14,14 @@ class WidgetConfigActivity : AppCompatActivity() {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     private lateinit var datePicker: DatePicker
     private lateinit var confirmButton: Button
+    private lateinit var modeRadioGroup: RadioGroup
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_widget_config)
 
-        // 设置结果为取消，如果用户直接退出
         setResult(Activity.RESULT_CANCELED)
 
-        // 获取部件ID
         appWidgetId = intent?.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID,
             AppWidgetManager.INVALID_APPWIDGET_ID
@@ -34,6 +34,7 @@ class WidgetConfigActivity : AppCompatActivity() {
 
         datePicker = findViewById(R.id.widgetDatePicker)
         confirmButton = findViewById(R.id.confirmButton)
+        modeRadioGroup = findViewById(R.id.modeRadioGroup)
 
         confirmButton.setOnClickListener {
             val selectedDate = LocalDate.of(
@@ -41,18 +42,18 @@ class WidgetConfigActivity : AppCompatActivity() {
                 datePicker.month + 1,
                 datePicker.dayOfMonth
             )
+            
+            val isCountDown = modeRadioGroup.checkedRadioButtonId == R.id.countDownRadio
 
-            // 保存选择的日期到 SharedPreferences，使用部件ID作为key
             getSharedPreferences("date_prefs", MODE_PRIVATE).edit().apply {
                 putLong("widget_${appWidgetId}_date", selectedDate.toEpochDay())
+                putBoolean("widget_${appWidgetId}_countdown", isCountDown)
                 apply()
             }
 
-            // 更新部件
             val appWidgetManager = AppWidgetManager.getInstance(this)
             DateCounterWidget.updateAppWidget(this, appWidgetManager, appWidgetId)
 
-            // 设置结果为成功
             val resultValue = Intent().apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             }

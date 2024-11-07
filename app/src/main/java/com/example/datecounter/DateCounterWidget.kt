@@ -95,20 +95,36 @@ class DateCounterWidget : AppWidgetProvider() {
             appWidgetId: Int
         ) {
             val prefs = context.getSharedPreferences("date_prefs", Context.MODE_PRIVATE)
-            // 使用部件ID获取对应的日期
             val savedDateEpochDay = prefs.getLong("widget_${appWidgetId}_date", LocalDate.now().toEpochDay())
+            val isCountDown = prefs.getBoolean("widget_${appWidgetId}_countdown", false)
             val savedDate = LocalDate.ofEpochDay(savedDateEpochDay)
             val today = LocalDate.now()
-            val totalDays = ChronoUnit.DAYS.between(savedDate, today)
-            val weeks = totalDays / 7
-            val remainingDays = totalDays % 7
+            
+            val totalDays = if (isCountDown) {
+                ChronoUnit.DAYS.between(today, savedDate)
+            } else {
+                ChronoUnit.DAYS.between(savedDate, today)
+            }
+            
+            val weeks = kotlin.math.abs(totalDays) / 7
+            val remainingDays = kotlin.math.abs(totalDays) % 7
 
             val views = RemoteViews(context.packageName, R.layout.widget_date_counter)
             views.setTextViewText(R.id.widget_date, context.getString(R.string.date_format, savedDate.toString()))
-            views.setTextViewText(R.id.widget_days, context.getString(R.string.days_passed, totalDays))
+            
+            val daysText = if (isCountDown) {
+                if (totalDays > 0) {
+                    context.getString(R.string.days_remaining, totalDays)
+                } else {
+                    context.getString(R.string.days_overdue, kotlin.math.abs(totalDays))
+                }
+            } else {
+                context.getString(R.string.days_passed, totalDays)
+            }
+            
+            views.setTextViewText(R.id.widget_days, daysText)
             views.setTextViewText(R.id.widget_weeks_days, context.getString(R.string.weeks_days_passed, weeks, remainingDays))
 
-            // 添加点击事件，打开配置活动
             val configIntent = Intent(context, WidgetConfigActivity::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             }
