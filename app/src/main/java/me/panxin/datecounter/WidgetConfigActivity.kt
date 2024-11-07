@@ -1,4 +1,4 @@
-package com.example.datecounter
+package me.panxin.datecounter
 
 import android.app.Activity
 import android.appwidget.AppWidgetManager

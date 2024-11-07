@@ -1,4 +1,4 @@
-package com.example.datecounter
+package me.panxin.datecounter
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
 
@@ -87,7 +86,7 @@ class DateCounterWidget : AppWidgetProvider() {
     }
 
     companion object {
-        private const val ACTION_UPDATE_WIDGET = "com.example.datecounter.UPDATE_WIDGET"
+        private const val ACTION_UPDATE_WIDGET = "me.panxin.datecounter.UPDATE_WIDGET"
 
         fun updateAppWidget(
             context: Context,

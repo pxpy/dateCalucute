@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.datecounter'
+    namespace 'me.panxin.datecounter'
     compileSdk 33
     
     defaultConfig {
-        applicationId "com.example.datecounter"
+        applicationId "me.panxin.datecounter"
         minSdk 26
         targetSdk 33
         versionCode 1
