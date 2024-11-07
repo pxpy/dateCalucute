@@ -1,0 +1,63 @@
+package com.example.datecounter
+
+import android.app.Activity
+import android.appwidget.AppWidgetManager
+import android.content.Intent
+import android.os.Bundle
+import android.widget.Button
+import android.widget.DatePicker
+import androidx.appcompat.app.AppCompatActivity
+import java.time.LocalDate
+
+class WidgetConfigActivity : AppCompatActivity() {
+    private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
+    private lateinit var datePicker: DatePicker
+    private lateinit var confirmButton: Button
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_widget_config)
+
+        // 设置结果为取消，如果用户直接退出
+        setResult(Activity.RESULT_CANCELED)
+
+        // 获取部件ID
+        appWidgetId = intent?.extras?.getInt(
+            AppWidgetManager.EXTRA_APPWIDGET_ID,
+            AppWidgetManager.INVALID_APPWIDGET_ID
+        ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
+
+        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            finish()
+            return
+        }
+
+        datePicker = findViewById(R.id.widgetDatePicker)
+        confirmButton = findViewById(R.id.confirmButton)
+
+        confirmButton.setOnClickListener {
+            val selectedDate = LocalDate.of(
+                datePicker.year,
+                datePicker.month + 1,
+                datePicker.dayOfMonth
+            )
+
+            // 保存选择的日期到 SharedPreferences，使用部件ID作为key
+            getSharedPreferences("date_prefs", MODE_PRIVATE).edit().apply {
+                putLong("widget_${appWidgetId}_date", selectedDate.toEpochDay())
+                apply()
+            }
+
+            // 更新部件
+            val appWidgetManager = AppWidgetManager.getInstance(this)
+            DateCounterWidget.updateAppWidget(this, appWidgetManager, appWidgetId)
+
+            // 设置结果为成功
+            val resultValue = Intent().apply {
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            }
+            setResult(Activity.RESULT_OK, resultValue)
+            finish()
+        }
+    }
+} 

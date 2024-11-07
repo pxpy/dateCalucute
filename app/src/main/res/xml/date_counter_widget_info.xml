@@ -4,6 +4,7 @@
     android:minHeight="60dp"
     android:updatePeriodMillis="86400000"
     android:initialLayout="@layout/widget_date_counter"
+    android:configure="com.example.datecounter.WidgetConfigActivity"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
     android:previewLayout="@layout/widget_date_counter">

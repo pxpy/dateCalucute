@@ -86,28 +86,41 @@ class DateCounterWidget : AppWidgetProvider() {
         )
     }
 
-    private fun updateAppWidget(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetId: Int
-    ) {
-        val prefs = context.getSharedPreferences("date_prefs", Context.MODE_PRIVATE)
-        val savedDateEpochDay = prefs.getLong("saved_date", LocalDate.now().toEpochDay())
-        val savedDate = LocalDate.ofEpochDay(savedDateEpochDay)
-        val today = LocalDate.now()
-        val totalDays = ChronoUnit.DAYS.between(savedDate, today)
-        val weeks = totalDays / 7
-        val remainingDays = totalDays % 7
-
-        val views = RemoteViews(context.packageName, R.layout.widget_date_counter)
-        views.setTextViewText(R.id.widget_date, context.getString(R.string.date_format, savedDate.toString()))
-        views.setTextViewText(R.id.widget_days, context.getString(R.string.days_passed, totalDays))
-        views.setTextViewText(R.id.widget_weeks_days, context.getString(R.string.weeks_days_passed, weeks, remainingDays))
-
-        appWidgetManager.updateAppWidget(appWidgetId, views)
-    }
-
     companion object {
         private const val ACTION_UPDATE_WIDGET = "com.example.datecounter.UPDATE_WIDGET"
+
+        fun updateAppWidget(
+            context: Context,
+            appWidgetManager: AppWidgetManager,
+            appWidgetId: Int
+        ) {
+            val prefs = context.getSharedPreferences("date_prefs", Context.MODE_PRIVATE)
+            // 使用部件ID获取对应的日期
+            val savedDateEpochDay = prefs.getLong("widget_${appWidgetId}_date", LocalDate.now().toEpochDay())
+            val savedDate = LocalDate.ofEpochDay(savedDateEpochDay)
+            val today = LocalDate.now()
+            val totalDays = ChronoUnit.DAYS.between(savedDate, today)
+            val weeks = totalDays / 7
+            val remainingDays = totalDays % 7
+
+            val views = RemoteViews(context.packageName, R.layout.widget_date_counter)
+            views.setTextViewText(R.id.widget_date, context.getString(R.string.date_format, savedDate.toString()))
+            views.setTextViewText(R.id.widget_days, context.getString(R.string.days_passed, totalDays))
+            views.setTextViewText(R.id.widget_weeks_days, context.getString(R.string.weeks_days_passed, weeks, remainingDays))
+
+            // 添加点击事件，打开配置活动
+            val configIntent = Intent(context, WidgetConfigActivity::class.java).apply {
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            }
+            val pendingIntent = PendingIntent.getActivity(
+                context,
+                appWidgetId,
+                configIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent)
+
+            appWidgetManager.updateAppWidget(appWidgetId, views)
+        }
     }
 } 
