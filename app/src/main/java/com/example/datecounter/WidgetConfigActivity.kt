@@ -39,7 +39,14 @@ class WidgetConfigActivity : AppCompatActivity() {
         modeRadioGroup = findViewById(R.id.modeRadioGroup)
         titleEditText = findViewById(R.id.titleEditText)
 
-        loadExistingSettings()
+        val prefs = getSharedPreferences("date_prefs", MODE_PRIVATE)
+        if (prefs.contains("widget_${appWidgetId}_date")) {
+            loadExistingSettings(prefs)
+        } else {
+            val today = LocalDate.now()
+            datePicker.updateDate(today.year, today.monthValue - 1, today.dayOfMonth)
+            modeRadioGroup.check(R.id.countUpRadio)
+        }
 
         confirmButton.setOnClickListener {
             val selectedDate = LocalDate.of(
@@ -66,19 +73,11 @@ class WidgetConfigActivity : AppCompatActivity() {
             }
             setResult(Activity.RESULT_OK, resultValue)
 
-            val homeIntent = Intent(Intent.ACTION_MAIN).apply {
-                addCategory(Intent.CATEGORY_HOME)
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            }
-            startActivity(homeIntent)
-            
             finish()
         }
     }
 
-    private fun loadExistingSettings() {
-        val prefs = getSharedPreferences("date_prefs", MODE_PRIVATE)
-        
+    private fun loadExistingSettings(prefs: android.content.SharedPreferences) {
         val savedDateEpochDay = prefs.getLong("widget_${appWidgetId}_date", LocalDate.now().toEpochDay())
         val savedDate = LocalDate.ofEpochDay(savedDateEpochDay)
         datePicker.updateDate(
