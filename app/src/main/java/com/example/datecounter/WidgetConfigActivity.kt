@@ -39,6 +39,8 @@ class WidgetConfigActivity : AppCompatActivity() {
         modeRadioGroup = findViewById(R.id.modeRadioGroup)
         titleEditText = findViewById(R.id.titleEditText)
 
+        loadExistingSettings()
+
         confirmButton.setOnClickListener {
             val selectedDate = LocalDate.of(
                 datePicker.year,
@@ -72,5 +74,25 @@ class WidgetConfigActivity : AppCompatActivity() {
             
             finish()
         }
+    }
+
+    private fun loadExistingSettings() {
+        val prefs = getSharedPreferences("date_prefs", MODE_PRIVATE)
+        
+        val savedDateEpochDay = prefs.getLong("widget_${appWidgetId}_date", LocalDate.now().toEpochDay())
+        val savedDate = LocalDate.ofEpochDay(savedDateEpochDay)
+        datePicker.updateDate(
+            savedDate.year,
+            savedDate.monthValue - 1,
+            savedDate.dayOfMonth
+        )
+
+        val savedTitle = prefs.getString("widget_${appWidgetId}_title", "")
+        if (!savedTitle.isNullOrEmpty()) {
+            titleEditText.setText(savedTitle)
+        }
+
+        val isCountDown = prefs.getBoolean("widget_${appWidgetId}_countdown", false)
+        modeRadioGroup.check(if (isCountDown) R.id.countDownRadio else R.id.countUpRadio)
     }
 } 
