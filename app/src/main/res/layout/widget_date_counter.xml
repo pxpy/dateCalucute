@@ -4,36 +4,69 @@
     android:id="@+id/widget_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
-    android:background="@android:color/white"
-    tools:context=".DateCounterWidget">
+    android:padding="4dp">
 
-    <TextView
-        android:id="@+id/widget_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textSize="14sp"
-        tools:text="选择日期: 2024-03-20" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/widget_background"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/widget_days"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/widget_date"
-        android:layout_centerHorizontal="true"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        tools:text="已过去 10 天" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/widget_weeks_days"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/widget_days"
-        android:layout_centerHorizontal="true"
-        android:textSize="14sp"
-        android:textColor="#666666"
-        tools:text="1周3天" />
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_calendar" />
 
+            <TextView
+                android:id="@+id/widget_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:textColor="#5C6BC0"
+                android:textSize="14sp"
+                tools:text="2024-03-20" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/widget_days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textColor="#212121"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="已过去 10 天" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#757575"
+                android:textSize="14sp"
+                android:text="≈ " />
+
+            <TextView
+                android:id="@+id/widget_weeks_days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#5C6BC0"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                tools:text="1周3天" />
+        </LinearLayout>
+
+    </LinearLayout>
 </RelativeLayout> 
