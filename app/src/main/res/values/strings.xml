@@ -9,4 +9,6 @@
     <string name="confirm">确认</string>
     <string name="days_remaining">还剩 %d 天</string>
     <string name="days_overdue">已超期 %d 天</string>
+    <string name="event_title">事项标题</string>
+    <string name="default_title">日期记录</string>
 </resources> 

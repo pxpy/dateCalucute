@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.RadioGroup
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import java.time.LocalDate
 
@@ -15,6 +16,7 @@ class WidgetConfigActivity : AppCompatActivity() {
     private lateinit var datePicker: DatePicker
     private lateinit var confirmButton: Button
     private lateinit var modeRadioGroup: RadioGroup
+    private lateinit var titleEditText: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +37,7 @@ class WidgetConfigActivity : AppCompatActivity() {
         datePicker = findViewById(R.id.widgetDatePicker)
         confirmButton = findViewById(R.id.confirmButton)
         modeRadioGroup = findViewById(R.id.modeRadioGroup)
+        titleEditText = findViewById(R.id.titleEditText)
 
         confirmButton.setOnClickListener {
             val selectedDate = LocalDate.of(
@@ -44,10 +47,12 @@ class WidgetConfigActivity : AppCompatActivity() {
             )
             
             val isCountDown = modeRadioGroup.checkedRadioButtonId == R.id.countDownRadio
+            val title = titleEditText.text.toString().takeIf { it.isNotBlank() } ?: getString(R.string.default_title)
 
             getSharedPreferences("date_prefs", MODE_PRIVATE).edit().apply {
                 putLong("widget_${appWidgetId}_date", selectedDate.toEpochDay())
                 putBoolean("widget_${appWidgetId}_countdown", isCountDown)
+                putString("widget_${appWidgetId}_title", title)
                 apply()
             }
 

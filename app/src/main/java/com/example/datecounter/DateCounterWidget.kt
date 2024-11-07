@@ -97,6 +97,7 @@ class DateCounterWidget : AppWidgetProvider() {
             val prefs = context.getSharedPreferences("date_prefs", Context.MODE_PRIVATE)
             val savedDateEpochDay = prefs.getLong("widget_${appWidgetId}_date", LocalDate.now().toEpochDay())
             val isCountDown = prefs.getBoolean("widget_${appWidgetId}_countdown", false)
+            val title = prefs.getString("widget_${appWidgetId}_title", context.getString(R.string.default_title))
             val savedDate = LocalDate.ofEpochDay(savedDateEpochDay)
             val today = LocalDate.now()
             
@@ -110,6 +111,7 @@ class DateCounterWidget : AppWidgetProvider() {
             val remainingDays = kotlin.math.abs(totalDays) % 7
 
             val views = RemoteViews(context.packageName, R.layout.widget_date_counter)
+            views.setTextViewText(R.id.widget_title, title)
             views.setTextViewText(R.id.widget_date, context.getString(R.string.date_format, savedDate.toString()))
             
             val daysText = if (isCountDown) {
