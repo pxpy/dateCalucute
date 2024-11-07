@@ -63,6 +63,13 @@ class WidgetConfigActivity : AppCompatActivity() {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             }
             setResult(Activity.RESULT_OK, resultValue)
+
+            val homeIntent = Intent(Intent.ACTION_MAIN).apply {
+                addCategory(Intent.CATEGORY_HOME)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+            startActivity(homeIntent)
+            
             finish()
         }
     }
