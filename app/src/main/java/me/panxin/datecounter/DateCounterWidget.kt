@@ -105,9 +105,6 @@ class DateCounterWidget : AppWidgetProvider() {
             } else {
                 ChronoUnit.DAYS.between(savedDate, today)
             }
-            
-            val weeks = kotlin.math.abs(totalDays) / 7
-            val remainingDays = kotlin.math.abs(totalDays) % 7
 
             val views = RemoteViews(context.packageName, R.layout.widget_date_counter)
             views.setTextViewText(R.id.widget_title, title)
@@ -124,7 +121,7 @@ class DateCounterWidget : AppWidgetProvider() {
             }
             
             views.setTextViewText(R.id.widget_days, daysText)
-            views.setTextViewText(R.id.widget_weeks_days, context.getString(R.string.weeks_days_passed, weeks, remainingDays))
+            views.setTextViewText(R.id.widget_weeks_days, DateSpanFormatter.format(context, savedDate, today))
 
             val configIntent = Intent(context, WidgetConfigActivity::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
